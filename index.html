@@ -248,6 +248,14 @@
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: #f1f1f1; }
         ::-webkit-scrollbar-thumb { background: #5b21b6; border-radius: 10px; }
+
+        /* Estilos para ocultar os elementos visuais do Google Translate e manter o design limpo */
+        body { top: 0 !important; }
+        .skiptranslate iframe { display: none !important; }
+        .goog-tooltip { display: none !important; }
+        .goog-tooltip:hover { display: none !important; }
+        .goog-text-highlight { background-color: transparent !important; border: none !important; box-shadow: none !important; }
+        #google_translate_element { display: none !important; }
     </style>
 </head>
 
@@ -699,6 +707,34 @@
         </div>
 
     </div>
+
+    <!-- Div oculta necessária para o Google Translate -->
+    <div id="google_translate_element"></div>
+
+    <script>
+        // Tradução Automática baseada no idioma do Navegador (Google Ads Compliant)
+        (function() {
+            // Detecta o idioma do navegador do usuário
+            var userLang = navigator.language || navigator.userLanguage;
+            var langCode = userLang.split('-')[0]; // Extrai o código base (ex: 'pt', 'es', 'fr')
+            
+            // Se o idioma não for Inglês ('en') e o cookie de tradução ainda não existir
+            if (langCode && langCode !== 'en' && document.cookie.indexOf('googtrans=') === -1) {
+                // Define o cookie instruindo o Google Translate a traduzir do Inglês para o idioma local do usuário
+                document.cookie = "googtrans=/en/" + langCode + "; path=/";
+                document.cookie = "googtrans=/en/" + langCode + "; domain=" + location.hostname + "; path=/";
+            }
+        })();
+
+        // Inicializa o Google Translate de forma invisível
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'en',
+                autoDisplay: false
+            }, 'google_translate_element');
+        }
+    </script>
+    <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
     <script>
         // DOM Elements
